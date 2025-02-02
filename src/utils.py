@@ -1,6 +1,7 @@
 import os
 import sys
 import hashlib
+import platform
 
 def get_size(path):
     """获取文件或目录的总大小（字节）"""
@@ -24,4 +25,8 @@ def get_resource_path(relative_path):
 
 def hash_filename(filename):
     """使用 MD5 对文件名进行哈希"""
-    return hashlib.md5(filename.encode('utf-8')).hexdigest() 
+    return hashlib.md5(filename.encode('utf-8')).hexdigest()
+
+def is_windows():
+    """检查是否为Windows系统"""
+    return platform.system().lower() == 'windows' 

@@ -1,9 +1,9 @@
 import os
 import json
 from getpass import getpass
-from logger import logger, setup_logging
-from compression import compress_item
-from utils import hash_filename
+from src.logger import logger, setup_logging
+from src.compression import compress_item
+from src.utils import hash_filename, is_windows
 
 def main():
     try:
@@ -78,7 +78,7 @@ def main():
         logger.error(f"发生错误: {str(e)}", exc_info=True)
         print(f"\n错误发生: {str(e)}")
     
-    if os.name == 'nt':
+    if is_windows():
         input("\n按 Enter 键退出...")
 
 if __name__ == "__main__":

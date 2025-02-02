@@ -1,17 +1,32 @@
 import os
 import subprocess
-from logger import logger
-from utils import get_resource_path, get_size
+import platform
+from src.logger import logger
+from src.utils import get_resource_path, get_size
+
+def get_7z_command():
+    """获取对应平台的7z命令"""
+    system = platform.system().lower()
+    if system == 'windows':
+        # Windows下使用打包的7z.exe
+        seven_zip_path = get_resource_path(os.path.join('resources', '7z.exe'))
+        if not os.path.exists(seven_zip_path):
+            raise FileNotFoundError("未找到7z.exe，请确保它在resources目录中")
+        return seven_zip_path
+    elif system == 'darwin':
+        # macOS通常通过brew安装p7zip
+        return '7za'
+    else:
+        # Linux通常通过包管理器安装p7zip-full
+        return '7z'
 
 def compress_with_7z(source_path, output_path, password, volume_size=None):
     """使用7z进行压缩，可选分卷大小"""
     try:
-        seven_zip_path = get_resource_path(os.path.join('resources', '7z.exe'))
-        if not os.path.exists(seven_zip_path):
-            raise FileNotFoundError("未找到7z.exe，请确保它在resources目录中")
-
+        seven_zip_cmd = get_7z_command()
+        
         cmd = [
-            seven_zip_path,
+            seven_zip_cmd,
             'a',
             '-t7z',
             f'-p{password}',

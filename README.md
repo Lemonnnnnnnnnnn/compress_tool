@@ -42,7 +42,14 @@ source venv/bin/activate
 
 # 安装依赖
 pip install -r requirements.txt
+
+# 确保7zip已安装（仅Linux/macOS需要）
+# Linux:
+sudo apt-get install p7zip-full
+# macOS:
+brew install p7zip
 ```
+
 
 ### 使用说明
 

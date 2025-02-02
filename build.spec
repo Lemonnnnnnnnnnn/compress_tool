@@ -1,17 +1,25 @@
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_submodules
+import platform
 
 block_cipher = None
+
+# 根据平台决定是否包含7z相关文件
+system = platform.system().lower()
+if system == 'windows':
+    binaries = [
+        ('resources/7z.exe', 'resources'),
+        ('resources/7z.dll', 'resources'),
+    ]
+else:
+    binaries = []
 
 a = Analysis(
     ['./src/main.py'],
     pathex=[],
-    binaries=[],
-    datas=[
-        ('resources/7z.exe', 'resources'),  # 将7z.exe打包到resources目录
-        ('resources/7z.dll', 'resources'),  # 7z.exe依赖的dll文件
-    ],
-    hiddenimports=[],
+    binaries=binaries,
+    datas=[],
+    hiddenimports=['src', 'src.logger', 'src.utils', 'src.compression'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -30,7 +38,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='compress_tool',  # 生成的exe名称
+    name='compress_tool',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
