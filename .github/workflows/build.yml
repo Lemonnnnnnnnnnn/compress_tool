@@ -3,6 +3,8 @@ name: Build Executables
 on:
   push:
     branches: [ "master" ]
+    tags:
+      - 'v*'  # 匹配 v开头的标签，如 v1.0.0
   pull_request:
     branches: [ "master" ]
 
@@ -55,4 +57,28 @@ jobs:
       with:
         name: compress_tool-${{ runner.os }}
         path: dist/compress_tool
-        if-no-files-found: error 
+        if-no-files-found: error
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          files: |
+            artifacts/compress_tool-Windows/compress_tool.exe
+            artifacts/compress_tool-Linux/compress_tool
+            artifacts/compress_tool-macOS/compress_tool
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
