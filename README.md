@@ -1,5 +1,7 @@
 # 安全文件压缩工具
 
+[English](README_EN.md) | 简体中文
+
 ![Python版本](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![许可证](https://img.shields.io/badge/License-MIT-green)
 
