@@ -2,11 +2,8 @@ name: Build Executables
 
 on:
   push:
-    branches: [ "master" ]
     tags:
       - 'v*'  # 匹配 v开头的标签，如 v1.0.0
-  pull_request:
-    branches: [ "master" ]
 
 jobs:
   build:
