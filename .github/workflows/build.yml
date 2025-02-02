@@ -70,15 +70,23 @@ jobs:
         with:
           path: artifacts
           
+      - name: List artifacts
+        run: |
+          ls -R artifacts/
+          
+      - name: Set execute permission
+        run: |
+          chmod +x artifacts/compress_tool-Linux/compress_tool
+          chmod +x artifacts/compress_tool-macOS/compress_tool
+          
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+          generate_release_notes: true
           files: |
-            artifacts/compress_tool-Windows/compress_tool.exe
-            artifacts/compress_tool-Linux/compress_tool
-            artifacts/compress_tool-macOS/compress_tool
+            artifacts/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
